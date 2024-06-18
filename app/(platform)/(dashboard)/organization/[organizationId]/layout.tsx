@@ -1,6 +1,8 @@
+import { startCase } from "lodash";
+
 import { auth } from "@clerk/nextjs/server";
 
-import { startCase } from "lodash";
+import { OrgControl } from "./_componets/org-control";
 
 export async function generateMetadata() {
   const { orgSlug } = auth();
@@ -11,7 +13,12 @@ export async function generateMetadata() {
 }
 
 const OrganizationIdLayout = ({ children }: { children: React.ReactNode }) => {
-  return <>{children}</>;
+  return (
+    <>
+      <OrgControl />
+      {children}
+    </>
+  );
 };
 
 export default OrganizationIdLayout;

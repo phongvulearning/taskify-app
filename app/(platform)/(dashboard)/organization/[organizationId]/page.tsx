@@ -1,9 +1,19 @@
-import React from "react";
+import React, { Suspense } from "react";
 
-interface OrganizationIdPageProps {}
+import { Info } from "./_componets/info";
+import { Separator } from "@/components/ui/separator";
+import { BoardList } from "./_componets/board-list";
 
-const OrganizationIdPage = (props: OrganizationIdPageProps) => {
-  return <div className="w-full mb-20">OrganizationIdPage</div>;
+const OrganizationIdPage = () => {
+  return (
+    <div className="w-full mb-20">
+      <Info />
+      <Separator className="my-4" />
+      <Suspense fallback={<BoardList.Skeleton />}>
+        <BoardList />
+      </Suspense>
+    </div>
+  );
 };
 
 export default OrganizationIdPage;

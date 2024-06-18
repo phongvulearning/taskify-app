@@ -1,26 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRouted = createRouteMatcher([
-  "/",
-  "/sign-in",
-  "/sign-up",
-  "/select-org",
-]);
+const isPublicRouted = createRouteMatcher(["/"]);
 
 export default clerkMiddleware(
   (auth, req) => {
     const _auth = auth();
 
-    if (isPublicRouted(req) && !_auth.userId) {
-      return;
-    }
+    // if (isPublicRouted(req) && !_auth.userId) {
+    //   return;
+    // }
 
-    if (!_auth.userId && !isPublicRouted(req)) {
-      const login = new URL("/", req.url);
-
-      return NextResponse.redirect(login);
-    }
+    //     if (!_auth.userId && !isPublicRouted(req)) {
+    //       const login = new URL("/", req.url);
+    //
+    //       return NextResponse.redirect(login);
+    //     }
 
     if (_auth.userId && isPublicRouted(req)) {
       let path = "/select-org";
@@ -51,5 +46,9 @@ export default clerkMiddleware(
 );
 
 export const config = {
-  matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    "/((?!.+.[w]+$|_next).*)",
+    "/(api|trpc)(.*)",
+    "/((?!api|_next/static|_next/image|.*\\.png$|.*\\.jpg$|.*\\.svg$).*)",
+  ],
 };
