@@ -7,6 +7,8 @@ import { InputType, OutputType } from "./type";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateBoard } from "./shema";
 import { createAuditLog } from "@/lib/create-audit-log";
+import { hasAvailableCount, increaseAvailableCount } from "@/lib/org-limit";
+import { checkSubscription } from "@/lib/subscription";
 
 const handler = async (validatedData: InputType): Promise<OutputType> => {
   const { userId, orgId } = auth();
@@ -17,6 +19,15 @@ const handler = async (validatedData: InputType): Promise<OutputType> => {
     };
   }
 
+  const canCreateBoard = await hasAvailableCount();
+  const isPro = await checkSubscription();
+
+  if (!canCreateBoard && !isPro) {
+    return {
+      error:
+        "You have reached the maximum number of boards allowed in your organization. Please upgrade to a paid plan to create more.",
+    };
+  }
   // Create a board
   const { title, image } = validatedData;
 
@@ -48,6 +59,10 @@ const handler = async (validatedData: InputType): Promise<OutputType> => {
         orgId,
       },
     });
+
+    if (!isPro) {
+      await increaseAvailableCount();
+    }
 
     await createAuditLog({
       entityType: "BOARD",

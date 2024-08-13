@@ -54,11 +54,11 @@ export const NavItem = ({
       icon: <Settings className="w-4 h-4 mr-2" />,
       href: `/organization/${organization.id}/settings`,
     },
-    // {
-    //   label: "Billing",
-    //   icon: <CreditCard className="w-4 h-4 mr-2" />,
-    //   href: `/organization/${organization.id}/billing`,
-    // },
+    {
+      label: "Billing",
+      icon: <CreditCard className="w-4 h-4 mr-2" />,
+      href: `/organization/${organization.id}/billing`,
+    },
   ];
 
   const onClick = useCallback(

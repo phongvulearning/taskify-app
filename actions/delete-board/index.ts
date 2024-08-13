@@ -9,6 +9,8 @@ import { DeleteBoard } from "./shema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createAuditLog } from "@/lib/create-audit-log";
+import { descreaseAvailableCount } from "@/lib/org-limit";
+import { checkSubscription } from "@/lib/subscription";
 
 const handler = async (validatedData: InputType): Promise<OutputType> => {
   const { userId, orgId } = auth();
@@ -18,6 +20,7 @@ const handler = async (validatedData: InputType): Promise<OutputType> => {
       error: "Unauthorized",
     };
   }
+  const isPro = await checkSubscription();
 
   const { id } = validatedData;
 
@@ -32,15 +35,19 @@ const handler = async (validatedData: InputType): Promise<OutputType> => {
       },
     });
 
-    await createAuditLog({
+  await createAuditLog({
       entityType: "BOARD",
       entityId: board.id,
       entityTitle: board.title,
       action: "DELETE",
     });
+
+    if (!isPro) {
+      await descreaseAvailableCount();
+    }
   } catch (error) {
     return {
-      error: "Failed to create board",
+      error: "Failed to delete board",
     };
   }
   revalidatePath(`/organization/${orgId}`);

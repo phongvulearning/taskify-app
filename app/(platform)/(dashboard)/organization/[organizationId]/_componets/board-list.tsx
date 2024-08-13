@@ -9,6 +9,9 @@ import { Hint } from "@/components/hint";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormPopover } from "@/components/form/form-popover";
 import { redirect } from "next/navigation";
+import { getCountAvailable } from "@/lib/org-limit";
+import { MAX_FREE_BOARDS } from "@/constants/board";
+import { checkSubscription } from "@/lib/subscription";
 
 export const BoardList = async () => {
   const { orgId } = auth();
@@ -23,6 +26,9 @@ export const BoardList = async () => {
       orgId,
     },
   });
+
+  const availableCount = await getCountAvailable();
+  const isPro = await checkSubscription();
 
   return (
     <div className="space-y-4">
@@ -49,14 +55,22 @@ export const BoardList = async () => {
             role="button"
           >
             <p className="text-sm">Create new board</p>
-            <span className="text-xs">Unlimited</span>
+            <span className="text-xs">
+              {isPro
+                ? "Unlimited"
+                : `${Math.max(MAX_FREE_BOARDS - availableCount, 0)} remaining`}
+            </span>
             <Hint
               sideOffset={10}
               side="bottom"
               align="start"
-              description={`
-            Free workspaces can have up to 5 boards. For unlimited boards, upgrade to a paid plan.  
-          `}
+              description={
+                isPro
+                  ? `Unlimited workspaces can have up to ${availableCount} boards.`
+                  : `
+            Free workspaces can have up to ${availableCount} boards. For unlimited boards, upgrade to a paid plan.  
+           `
+              }
             >
               <HelpCircle className="absolute bottom-2 right-2 w-[14px] h-[14px]" />
             </Hint>
