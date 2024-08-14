@@ -3,7 +3,7 @@
 import { Plus, X } from "lucide-react";
 import { ListWrapper } from "./list-wrapper";
 import { ElementRef, useCallback, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { FormInput } from "@/components/form/form-input";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { FormSubmit } from "@/components/form/form-button";
@@ -13,7 +13,6 @@ import { createList } from "@/actions/create-list";
 import { toast } from "sonner";
 
 export const ListForm = () => {
-  const router = useRouter();
   const boardId = useParams().boardId as string;
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
@@ -23,7 +22,6 @@ export const ListForm = () => {
     onSuccess(data) {
       toast.success(`List "${data.title}" created!`);
       disableEditing();
-      router.refresh();
     },
     onError(error) {
       toast.error(error);

@@ -69,51 +69,61 @@ export const FormPicker = ({ id, errors }: FormPickerProps) => {
   return (
     <div className="relative">
       <div className="grid grid-cols-3 gap-2 mb-2">
-        {images.map((image) => (
-          <div
-            key={image.id}
-            className={cn(
-              "cursor-pointer relative aspect-video group hover:opacity-75 transition bg-muted rounded-sm",
-              {
-                "opacity-50 hover:opacity-50 cursor-auto": pending,
-              }
-            )}
-            onClick={() => {
-              if (pending) return;
-              setSelectedImageId(image.id);
-            }}
-          >
-            <input
-              type="radio"
-              id={id}
-              name={id}
-              hidden
-              onChange={() => {}}
-              disabled={pending}
-              checked={selectedImageId === image.id}
-              value={`${image.id}|${image.urls.thumb}|${image.urls.full}|${image.links.html}|${image.user.name}`}
-            />
-            <Image
-              fill
-              src={image.urls.thumb}
-              alt="Unsplash image"
-              className="object-cover rounded-sm"
-              sizes="100px"
-            />
-            {selectedImageId === image.id && (
-              <div className="absolute inset-y-0 h-full w-full bg-black/30 flex items-center justify-center rounded-sm">
-                <Check className="w-4 h-4 text-white" />
-              </div>
-            )}
-            <Link
-              href={image.links.html}
-              target="_blank"
-              className="opacity-0 group-hover:opacity-100 absolute bottom-0 w-full text-[10px] truncate text-white hover:underline p-0.5 bg-black/50"
+        {images.map((image) => {
+          return (
+            <div
+              key={image.id}
+              className={cn(
+                "cursor-pointer relative aspect-video group hover:opacity-75 transition bg-muted rounded-sm",
+                {
+                  "opacity-50 hover:opacity-50 cursor-auto": pending,
+                }
+              )}
+              onClick={() => {
+                if (pending) return;
+                setSelectedImageId(image.id);
+              }}
             >
-              {image.user.name}
-            </Link>
-          </div>
-        ))}
+              <input
+                type="radio"
+                id={id}
+                name={id}
+                hidden
+                onChange={() => {}}
+                disabled={pending}
+                checked={selectedImageId === image.id}
+                value={`${image.id}|${image.urls.thumb}|${image.urls.full}|${image.links.html}|${image.user.name}`}
+              />
+              <Image
+                fill
+                src={image.urls.small}
+                alt="Unsplash image"
+                className="object-cover rounded-sm"
+                sizes="100px"
+              />
+              <Image
+                priority
+                fill
+                src={image.urls.thumb}
+                alt="Unsplash image"
+                className="object-cover rounded-sm"
+                sizes="100px"
+              />
+              {selectedImageId === image.id && (
+                <div className="absolute inset-y-0 h-full w-full bg-black/30 flex items-center justify-center rounded-sm">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+              )}
+              <Link
+                href={image.links.html}
+                target="_blank"
+                className="opacity-0 group-hover:opacity-100 absolute bottom-0 w-full text-[10px] truncate text-white hover:underline p-0.5 bg-black/50"
+              >
+                {image.user.name}
+              </Link>
+            </div>
+          );
+        })}
       </div>
       <FormErrors id={id} errors={errors} />
     </div>

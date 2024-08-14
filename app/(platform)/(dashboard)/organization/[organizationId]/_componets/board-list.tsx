@@ -48,7 +48,14 @@ export const BoardList = async () => {
           >
             <Image
               fill
+              priority
               src={board.imageFullUrl}
+              alt={board.title}
+              className="object-cover"
+            />
+            <Image
+              fill
+              src={board.imageThumbUrl}
               alt={board.title}
               className="object-cover"
             />

@@ -7,6 +7,7 @@ import { InputType, OutputType } from "./type";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateList } from "./shema";
 import { createAuditLog } from "@/lib/create-audit-log";
+import { revalidatePath } from "next/cache";
 
 const handler = async (validatedData: InputType): Promise<OutputType> => {
   const { userId, orgId } = auth();
@@ -69,6 +70,8 @@ const handler = async (validatedData: InputType): Promise<OutputType> => {
       error: "Failed to create board",
     };
   }
+
+  revalidatePath(`/board/${boardId}`);
 
   return { data: list };
 };

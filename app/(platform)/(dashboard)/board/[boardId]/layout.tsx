@@ -55,14 +55,7 @@ export default async function BoardIdLayout({
       // style={{ backgroundImage: `url(${board?.imageThumbUrl})` }}
     >
       <Image
-        loading="eager"
-        className="object-cover"
-        src={board?.imageThumbUrl}
-        alt={board?.title}
-        fill
-      />
-      <Image
-        loading="lazy"
+        priority
         className="object-cover"
         src={board?.imageFullUrl}
         alt={board?.title}
