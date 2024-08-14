@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { getCountAvailable } from "@/lib/org-limit";
 import { MAX_FREE_BOARDS } from "@/constants/board";
 import { checkSubscription } from "@/lib/subscription";
+import Image from "next/image";
 
 export const BoardList = async () => {
   const { orgId } = auth();
@@ -40,11 +41,17 @@ export const BoardList = async () => {
           <Link
             href={`/board/${board.id}`}
             key={board.id}
-            style={{
-              backgroundImage: `url(${board.imageFullUrl})`,
-            }}
+            // style={{
+            //   backgroundImage: `url(${board.imageFullUrl})`,
+            // }}
             className="group relative aspect-video w-full h-full bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm p-2 overflow-hidden"
           >
+            <Image
+              fill
+              src={board.imageFullUrl}
+              alt={board.title}
+              className="object-cover"
+            />
             <div className="absolute bg-black/30  inset-0 transition group-hover:bg-black/40" />
             <p className="relative font-semibold text-white">{board.title}</p>
           </Link>
