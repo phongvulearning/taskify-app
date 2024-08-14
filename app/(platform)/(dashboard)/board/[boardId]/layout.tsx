@@ -50,10 +50,13 @@ export default async function BoardIdLayout({
   }
 
   return (
-    <div
-      className="relative h-full w-full bg-no-repeat bg-cover bg-center"
-      // style={{ backgroundImage: `url(${board?.imageThumbUrl})` }}
-    >
+    <div className="relative h-full w-full bg-no-repeat bg-cover bg-center">
+      <Image
+        className="object-cover"
+        src={board?.imageThumbUrl}
+        alt={board?.title}
+        fill
+      />
       <Image
         priority
         className="object-cover"

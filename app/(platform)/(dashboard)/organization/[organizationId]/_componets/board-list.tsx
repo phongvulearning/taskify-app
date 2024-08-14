@@ -41,21 +41,18 @@ export const BoardList = async () => {
           <Link
             href={`/board/${board.id}`}
             key={board.id}
-            // style={{
-            //   backgroundImage: `url(${board.imageFullUrl})`,
-            // }}
-            className="group relative aspect-video w-full h-full bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm p-2 overflow-hidden"
+            className="group relative aspect-video w-full h-full bg-no-repeat bg-center bg-cover  rounded-sm p-2 overflow-hidden"
           >
             <Image
               fill
-              priority
-              src={board.imageFullUrl}
+              src={board.imageThumbUrl}
               alt={board.title}
               className="object-cover"
             />
             <Image
+              priority
               fill
-              src={board.imageThumbUrl}
+              src={board.imageFullUrl}
               alt={board.title}
               className="object-cover"
             />
@@ -80,9 +77,12 @@ export const BoardList = async () => {
               align="start"
               description={
                 isPro
-                  ? `Unlimited workspaces can have up to ${availableCount} boards.`
+                  ? `You can create unlimited boards.`
                   : `
-            Free workspaces can have up to ${availableCount} boards. For unlimited boards, upgrade to a paid plan.  
+            Free workspaces can have up to ${Math.max(
+              MAX_FREE_BOARDS - availableCount,
+              0
+            )} boards. For unlimited boards, upgrade to a paid plan.  
            `
               }
             >

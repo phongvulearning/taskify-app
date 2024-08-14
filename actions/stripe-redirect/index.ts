@@ -2,15 +2,15 @@
 
 import { db } from "@/lib/db";
 
-import { auth, currentUser, User } from "@clerk/nextjs/server";
-import { InputType, OutputType } from "./type";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { OutputType } from "./type";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { StripeRedirect } from "./shema";
 import { absoluteUrl } from "@/lib/utils";
 import { stripe } from "@/lib/stripe";
 import { revalidatePath } from "next/cache";
 
-const handler = async (validatedData: InputType): Promise<OutputType> => {
+const handler = async (): Promise<OutputType> => {
   const { userId, orgId } = auth();
   const user = await currentUser();
 
@@ -69,6 +69,9 @@ const handler = async (validatedData: InputType): Promise<OutputType> => {
           orgId,
         },
       });
+
+      console.log("stripeSession", stripeSession);
+
       url = stripeSession.url || "";
     }
   } catch (error) {
