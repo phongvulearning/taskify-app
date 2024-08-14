@@ -7,15 +7,13 @@ export default clerkMiddleware(
   (auth, req) => {
     const _auth = auth();
 
-    // if (isPublicRouted(req) && !_auth.userId) {
-    //   return;
-    // }
+    if (!_auth.userId && !isPublicRouted(req)) {
+      const login = new URL("/sign-in", req.url);
 
-    //     if (!_auth.userId && !isPublicRouted(req)) {
-    //       const login = new URL("/", req.url);
-    //
-    //       return NextResponse.redirect(login);
-    //     }
+      return _auth.redirectToSignIn({
+        returnBackUrl: login.href,
+      });
+    }
 
     if (_auth.userId && isPublicRouted(req)) {
       let path = "/select-org";
